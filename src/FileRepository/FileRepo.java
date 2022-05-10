@@ -4,22 +4,27 @@ import DAO.FibboListDAO;
 
 import java.io.*;
 
-public class FileRepo {
+public class FileRepo implements FileRepoInterface, Serializable {
 
-    public static void writeToFile (FibboListDAO list){
+    @Serial
+    private static final long serialVersionUID = 8663169602499357879L;
+
+    @Override
+    public void write(FibboListDAO list) {
         try (ObjectOutputStream objectOutputStream =
-                     new ObjectOutputStream(new FileOutputStream("List.bin"))){
+                     new ObjectOutputStream(new FileOutputStream("List.bin"))) {
             objectOutputStream.writeObject(list);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-    public static FibboListDAO readFromFile (){
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("List.bin"))){
+    @Override
+    public FibboListDAO read() {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("List.bin"))) {
             return (FibboListDAO) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             return null;
         }
     }
+
 }
